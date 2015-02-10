@@ -28,6 +28,8 @@ import android.content.Intent;
 import android.speech.RecognizerIntent;
 
 import android.speech.SpeechRecognizer;
+import android.speech.RecognitionListener;
+import android.os.Bundle;
 
 /**
  * Style and such borrowed from the TTS and PhoneListener plugins
