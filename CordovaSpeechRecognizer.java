@@ -106,7 +106,7 @@ public class CordovaSpeechRecognizer extends CordovaPlugin {
         }
 
 
-        mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+        mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(cordova.getActivity());
         mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                                          RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
