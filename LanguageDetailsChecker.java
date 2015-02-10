@@ -14,7 +14,7 @@
  *
  */
 
-package com.phonegap.plugins.speech;
+package uk.co.mattjewell;
 
 import java.util.List;
 
