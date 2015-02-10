@@ -42,6 +42,7 @@ public class CordovaSpeechRecognizer extends CordovaPlugin {
     private LanguageDetailsChecker languageDetailsChecker;
 
     private android.speech.SpeechRecognizer mSpeechRecognizer;
+    private RecognizerIntent mSpeechRecognizerIntent;
 
     //@Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
