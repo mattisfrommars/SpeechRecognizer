@@ -27,6 +27,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.speech.RecognizerIntent;
 
+import android.speech.SpeechRecognizer;
+
 /**
  * Style and such borrowed from the TTS and PhoneListener plugins
  */
@@ -36,6 +38,8 @@ public class SpeechRecognizer extends CordovaPlugin {
 
     private CallbackContext callbackContext;
     private LanguageDetailsChecker languageDetailsChecker;
+
+    private android.speech.SpeechRecognizer mSpeechRecognizer;
 
     //@Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
@@ -99,18 +103,92 @@ public class SpeechRecognizer extends CordovaPlugin {
             Log.e(LOG_TAG, String.format("startSpeechRecognitionActivity exception: %s", e.toString()));
         }
 
-        // Create the intent and set parameters
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language);
 
-        if (maxMatches > 0)
-            intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, maxMatches);
-        if (!prompt.equals(""))
-            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, prompt);
-        cordova.startActivityForResult(this, intent, REQUEST_CODE);
+        mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+        mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                                         RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,
+                                         this.getPackageName());
+
+
+        SpeechRecognitionListener listener = new SpeechRecognitionListener();
+        mSpeechRecognizer.setRecognitionListener(listener);
+
+        // // Create the intent and set parameters
+        // Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        // intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        
+        // intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language);
+
+        // if (maxMatches > 0)
+        //     intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, maxMatches);
+        // if (!prompt.equals(""))
+        //     intent.putExtra(RecognizerIntent.EXTRA_PROMPT, prompt);
+        // cordova.startActivityForResult(this, intent, REQUEST_CODE);
     }
+
+    protected class SpeechRecognitionListener implements RecognitionListener
+{
+
+    @Override
+    public void onBeginningOfSpeech()
+    {               
+        Log.d(LOG_TAG, "onBeginingOfSpeech"); 
+    }
+
+    @Override
+    public void onBufferReceived(byte[] buffer)
+    {
+
+    }
+
+    @Override
+    public void onEndOfSpeech()
+    {
+        Log.d(LOG_TAG, "onEndOfSpeech");
+     }
+
+    @Override
+    public void onError(int error)
+    {
+         mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
+
+        Log.d(LOG_TAG, "error = " + error);
+    }
+
+    @Override
+    public void onEvent(int eventType, Bundle params)
+    {
+
+    }
+
+    @Override
+    public void onPartialResults(Bundle partialResults)
+    {
+
+    }
+
+    @Override
+    public void onReadyForSpeech(Bundle params)
+    {
+        Log.d(LOG_TAG, "onReadyForSpeech"); //$NON-NLS-1$
+    }
+
+    @Override
+    public void onResults(Bundle results)
+    {
+        //Log.d(TAG, "onResults"); //$NON-NLS-1$
+        ArrayList<String> matches = results.getStringArrayList(android.speech.SpeechRecognizer.RESULTS_RECOGNITION);
+        // matches are the return values of speech recognition engine
+        // Use these values for whatever you wish to do
+    }
+
+    @Override
+    public void onRmsChanged(float rmsdB)
+    {
+    }
+}
 
     /**
      * Handle the results from the recognition activity.
