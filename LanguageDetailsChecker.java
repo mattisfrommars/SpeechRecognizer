@@ -14,7 +14,7 @@
  *
  */
 
-package uk.co.mattjewell;
+package uk.co.mattjewell.speech;
 
 import java.util.List;
 

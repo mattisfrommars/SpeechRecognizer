@@ -19,7 +19,7 @@
     
     <config-file target="res/xml/config.xml" parent="/*">
 	  <feature name="SpeechRecognizer" >
-	    <param name="android-package" value="uk.co.mattjewell.CordovaSpeechRecognizer"/>
+	    <param name="android-package" value="uk.co.mattjewell.speech.CordovaSpeechRecognizer"/>
 	  </feature>
 	</config-file>
     
